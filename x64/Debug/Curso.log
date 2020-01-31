@@ -1,0 +1,38 @@
+﻿  main.cpp
+C:\Users\juanr\OneDrive\Documentos\Visual Studio 2019\Projects\Repo\Curso\main.cpp(22,1): warning C4129: '	': unrecognized character escape sequence
+C:\Users\juanr\OneDrive\Documentos\Visual Studio 2019\Projects\Repo\Curso\main.cpp(32,1): warning C4129: '	': unrecognized character escape sequence
+C:\Users\juanr\OneDrive\Documentos\Visual Studio 2019\Projects\Repo\Curso\main.cpp(45,30): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
+main.obj : error LNK2019: unresolved external symbol __imp_glewInit referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwInit referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwWindowHint referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwDestroyWindow referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwGetFramebufferSize referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function main
+main.obj : error LNK2001: unresolved external symbol __imp___glewBindBuffer
+main.obj : error LNK2001: unresolved external symbol __imp___glewBufferData
+main.obj : error LNK2001: unresolved external symbol __imp___glewGenBuffers
+main.obj : error LNK2001: unresolved external symbol __imp___glewAttachShader
+main.obj : error LNK2001: unresolved external symbol __imp___glewCompileShader
+main.obj : error LNK2001: unresolved external symbol __imp___glewCreateProgram
+main.obj : error LNK2001: unresolved external symbol __imp___glewCreateShader
+main.obj : error LNK2001: unresolved external symbol __imp___glewEnableVertexAttribArray
+main.obj : error LNK2001: unresolved external symbol __imp___glewGetProgramInfoLog
+main.obj : error LNK2001: unresolved external symbol __imp___glewGetProgramiv
+main.obj : error LNK2001: unresolved external symbol __imp___glewGetShaderInfoLog
+main.obj : error LNK2001: unresolved external symbol __imp___glewGetShaderiv
+main.obj : error LNK2001: unresolved external symbol __imp___glewLinkProgram
+main.obj : error LNK2001: unresolved external symbol __imp___glewShaderSource
+main.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+main.obj : error LNK2001: unresolved external symbol __imp___glewValidateProgram
+main.obj : error LNK2001: unresolved external symbol __imp___glewVertexAttribPointer
+main.obj : error LNK2001: unresolved external symbol __imp___glewBindVertexArray
+main.obj : error LNK2001: unresolved external symbol __imp___glewGenVertexArrays
+main.obj : error LNK2001: unresolved external symbol __imp_glewExperimental
+C:\Users\juanr\OneDrive\Documentos\Visual Studio 2019\Projects\Repo\Curso\\..\..\..\External Libs\GLEW\lib\Release\Win32\glew32.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\juanr\OneDrive\Documentos\Visual Studio 2019\Projects\Repo\Curso\\..\..\..\External Libs\GLFW\lib-vc2019\glfw3.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\juanr\OneDrive\Documentos\Visual Studio 2019\Projects\Repo\Curso\x64\Debug\Curso.exe : fatal error LNK1120: 31 unresolved externals
