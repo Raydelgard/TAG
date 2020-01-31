@@ -3,12 +3,18 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string.h>
+#include <cmath>
 
 
 
 
 const GLint width = 800, height = 600;
-GLuint VAO, VBO, shader;
+GLuint VAO, VBO, shader, uniform;
+
+bool direction = true;
+float offset = 0.0f;
+float max = 0.7f;
+float inc = 0.005f;
 
 
 //Vertex Shader
@@ -16,10 +22,11 @@ static const char* vshader = "						    \n\
 #version 330											\n\
 														\n\
 layout (location = 0)	 in vec3 pos;					\n\
+uniform float xMove	;									\n\
 void main()												\n\
 {														\n\
 														\n\
-	gl_Position = vec4(0.4 * pos.x, 0.4 * pos.y, pos.z, 1.0);        \n\														\n\
+	gl_Position = vec4(0.4 * pos.x + xMove, 0.4 * pos.y, pos.z, 1.0);        \n\														\n\
 }";	
 
 static const char* fshader = "                          \n\
@@ -224,11 +231,26 @@ int main()
 		//handle user input
 		glfwPollEvents();
 
+		if (direction)
+		{
+			offset += inc;
+		}
+		else
+		{
+			offset -= inc;
+		}
+
+		if (abs(offset) >= max)
+			direction = !direction;
+
+
 		//clear window
 		glClearColor(0.0f,0.0f,0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glUseProgram(shader);
+
+		glUniform1f(uniform, offset);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
