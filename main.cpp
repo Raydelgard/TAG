@@ -1,11 +1,13 @@
-
 #include <stdio.h>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <string.h>
 #include <cmath>
 
+#include <GL\glew.h>
+#include <GLFW\glfw3.h>
 
+#include <glm\glm.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\type_ptr.hpp>
 
 
 const GLint width = 800, height = 600;
@@ -17,28 +19,30 @@ float max = 0.7f;
 float inc = 0.005f;
 
 
-//Vertex Shader
-static const char* vshader = "						    \n\
-#version 330											\n\
-														\n\
-layout (location = 0)	 in vec3 pos;					\n\
-uniform float xMove	;									\n\
-void main()												\n\
-{														\n\
-														\n\
-	gl_Position = vec4(0.4 * pos.x + xMove, 0.4 * pos.y, pos.z, 1.0);        \n\														\n\
-}";	
 
-static const char* fshader = "                          \n\
-#version 330											\n\
-														\n\
-out vec4 colour;										\n\
-void main()												\n\
-{														\n\
-														\n\
-	colour = vec4(1.0,0.0,0.0,1.0);			        \n\														\n\
-}";														
+// Vertex Shader code
+static const char* vshader = "                                                \n\
+#version 330                                                                  \n\
+                                                                              \n\
+layout (location = 0) in vec3 pos;											  \n\
+                                                                              \n\
+uniform mat4 model;                                                           \n\
+                                                                              \n\
+void main()                                                                   \n\
+{                                                                             \n\
+    gl_Position = model * vec4(pos.x, pos.y, pos.z, 1.0);		  \n\
+}";
 
+// Fragment Shader
+static const char* fshader = "                                                \n\
+#version 330                                                                  \n\
+                                                                              \n\
+out vec4 colour;                                                               \n\
+                                                                              \n\
+void main()                                                                   \n\
+{                                                                             \n\
+    colour = vec4(1.0, 0.0, 0.0, 1.0);                                         \n\
+}";
 
 void Addshader(GLuint program, const char* code, GLenum type)
 {
@@ -122,6 +126,7 @@ void CompileShader()
 
 	}
 
+	uniform = glGetUniformLocation(shader, "model");
 
 }
 
@@ -160,10 +165,6 @@ hemos generado previamente*/
 	glBindVertexArray(0);
 
 }
-
-
-
-
 
 
 int main()
@@ -250,7 +251,10 @@ int main()
 
 		glUseProgram(shader);
 
-		glUniform1f(uniform, offset);
+		glm::mat4 model(1.0f);
+		model = glm::translate(model, glm::vec3(offset, 0.0f, 0.0f));
+
+		glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(model));
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
