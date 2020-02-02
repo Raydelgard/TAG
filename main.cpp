@@ -11,7 +11,7 @@
 
 
 const GLint width = 800, height = 600;
-GLuint VAO, VBO, shader, uniform;
+GLuint VAO, VBO, IBO, shader, uniform;
 
 bool direction = true;
 float offset = 0.0f;
@@ -28,22 +28,30 @@ static const char* vshader = "                                                \n
                                                                               \n\
 layout (location = 0) in vec3 pos;											  \n\
                                                                               \n\
+out vec4 Vcol;                                                                              \n\
+                                                                              \n\
+                                                                              \n\
 uniform mat4 model;                                                           \n\
                                                                               \n\
 void main()                                                                   \n\
 {                                                                             \n\
-    gl_Position = model * vec4(0.4 * pos.x, 0.4 * pos.y, pos.z, 1.0);		  \n\
+                                                                              \n\
+    gl_Position = model * vec4(pos, 1.0);									  \n\
+    Vcol = vec4(clamp(pos, 0.0f, 1.0f), 1.0f);                                                                          \n\
 }";
 
 // Fragment Shader
 static const char* fshader = "                                                \n\
 #version 330                                                                  \n\
                                                                               \n\
+ in vec4 Vcol;                                                                             \n\
+                                                                              \n\
+                                                                              \n\
 out vec4 colour;                                                               \n\
                                                                               \n\
 void main()                                                                   \n\
 {                                                                             \n\
-    colour = vec4(1.0, 0.0, 0.0, 1.0);                                         \n\
+    colour = Vcol;                                     \n\
 }";
 
 void Addshader(GLuint program, const char* code, GLenum type)
@@ -139,8 +147,16 @@ void CompileShader()
 
 void Createtriangle()
 {
+	unsigned int index[] = { 
+		0, 3, 1,
+		1, 3, 2,
+		2, 3, 0,
+		0, 1, 2
+	
+	};
 	GLfloat vertices[] = {
-		-1.0f, -1.0f,-1.0f,
+		-1.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 1.0f,
 		1.0f, -1.0f, 0.0f,
 		0.0f, 1.0f, 0.0f
 	};
@@ -149,6 +165,10 @@ void Createtriangle()
 	glGenVertexArrays(1, &VAO);
 	//Asignamos ese id --> http://docs.gl/gl3/glBindVertexArray
 	glBindVertexArray(VAO);
+
+	glGenBuffers(1, &IBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
 
 	/*A partir de aquí, todas las operaciones que hagamos con un VAO van a ser con el que tiene ese id que
 hemos generado previamente*/
@@ -165,6 +185,8 @@ hemos generado previamente*/
 	glEnableVertexAttribArray(0);
 
 	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 }
 
@@ -217,6 +239,7 @@ int main()
 		return 1;
 	}
 
+	glEnable(GL_DEPTH_TEST);
 	//viewport size
 	glViewport(0, 0, bufferwidth, bufferheigth);
 
@@ -254,20 +277,25 @@ int main()
 
 		//clear window
 		glClearColor(0.0f,0.0f,0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(shader);
 
 		glm::mat4 model(1.0f);
-		model = glm::translate(model, glm::vec3(offset, 0.0f, 0.0f));
-		model = glm::rotate(model, angle * radians, glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::translate(model, glm::vec3(offset, 0.0f, 0.0f));
+		model = glm::rotate(model, angle * radians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 
 
 
 		glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(model));
 
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+
+		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 
 
