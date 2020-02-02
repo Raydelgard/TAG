@@ -17,6 +17,8 @@ bool direction = true;
 float offset = 0.0f;
 float max = 0.7f;
 float inc = 0.005f;
+const float radians = 3.14159265f / 180.0f;
+float angle = 0.0f;
 
 
 
@@ -30,7 +32,7 @@ uniform mat4 model;                                                           \n
                                                                               \n\
 void main()                                                                   \n\
 {                                                                             \n\
-    gl_Position = model * vec4(pos.x, pos.y, pos.z, 1.0);		  \n\
+    gl_Position = model * vec4(0.4 * pos.x, 0.4 * pos.y, pos.z, 1.0);		  \n\
 }";
 
 // Fragment Shader
@@ -244,6 +246,11 @@ int main()
 		if (abs(offset) >= max)
 			direction = !direction;
 
+		angle += 0.1f;
+		if (angle >= 360)
+		{
+			angle -= 360;
+		}
 
 		//clear window
 		glClearColor(0.0f,0.0f,0.0f, 1.0f);
@@ -253,6 +260,9 @@ int main()
 
 		glm::mat4 model(1.0f);
 		model = glm::translate(model, glm::vec3(offset, 0.0f, 0.0f));
+		model = glm::rotate(model, angle * radians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+
 
 		glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(model));
 
